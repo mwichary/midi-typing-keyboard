@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<title>Piano typewriter</title>
+<title>MIDI typing keyboard</title>
 <meta charset='utf-8'>
 
 <script src='grapheme-splitter.js'></script>
@@ -180,38 +180,38 @@
 
   let splitter = new GraphemeSplitter()
 
-	function initMIDI() {
-		console.log("Initializing MIDI…")
-		navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure)
-	}
+  function initMIDI() {
+    console.log("Initializing MIDI…")
+    navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure)
+  }
 
-	function onMIDISuccess(access) { 
-		midi = access
-		let inputs = midi.inputs
+  function onMIDISuccess(access) { 
+    midi = access
+    let inputs = midi.inputs
     let outputs = midi.outputs
 
-		console.log(`Found ${inputs.size} MIDI input(s)…`)
-		console.log(`Found ${outputs.size} MIDI outputs(s)…`)
+    console.log(`Found ${inputs.size} MIDI input(s)…`)
+    console.log(`Found ${outputs.size} MIDI outputs(s)…`)
 
-		if (inputs.size) {
-			let iterator = inputs.values()
+    if (inputs.size) {
+      let iterator = inputs.values()
       let input = iterator.next().value
-			input = iterator.next().value // Hardcoded for second input
-			console.log(`Connected input: ${input.name}`)
-			input.onmidimessage = handleMIDIMessage
-		}
+      input = iterator.next().value // Hardcoded for second input
+      console.log(`Connected input: ${input.name}`)
+      input.onmidimessage = handleMIDIMessage
+    }
 
     if (outputs.size) {
-			let iterator = outputs.values()
+      let iterator = outputs.values()
       midiOutput = iterator.next().value
-			midiOutput = iterator.next().value // Hardcoded for second output
-			console.log(`Connected output: ${midiOutput.name}`)
+      midiOutput = iterator.next().value // Hardcoded for second output
+      console.log(`Connected output: ${midiOutput.name}`)
     }
-	}
+  }
 
-	function onMIDIFailure(err) {
-		console.log("MIDI Init Error. Error code: " + err.code)
-	}
+  function onMIDIFailure(err) {
+    console.log("MIDI Init Error. Error code: " + err.code)
+  }
 
   function onBackspaceHold() {
     if (backspacePressed) {
@@ -272,14 +272,14 @@
     return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
   };
 
-	function handleMIDIMessage(event) {
-		// event.data & event.receivedTime are populated
-		// event.data has 3 components:
-		// 0) The device id
-		// 1) The controller id
-		// 2) The controller value (typically in the range 0 - 127)
+  function handleMIDIMessage(event) {
+    // event.data & event.receivedTime are populated
+    // event.data has 3 components:
+    // 0) The device id
+    // 1) The controller id
+    // 2) The controller value (typically in the range 0 - 127)
 
-		if (event.data.length === 3) {
+    if (event.data.length === 3) {
       let action = actions[event.data[1]]
       let force = event.data[2] / 127
       let pressed = (force > 0)
@@ -384,8 +384,8 @@
       }
 
       updateText()
-		}
-	}
+    }
+  }
 
   function main() {
     initMIDI()
